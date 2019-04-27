@@ -47,7 +47,7 @@ public class RankingFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database=FirebaseDatabase.getInstance();
-        questionScore=database.getReference("Question_score");
+        questionScore=database.getReference("Question_Score");
         rankingTbl=database.getReference("Ranking");
     }
 
