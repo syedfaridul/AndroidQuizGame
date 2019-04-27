@@ -1,5 +1,4 @@
 package com.example.quizgame;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.quizgame.Common.Common;
 import com.example.quizgame.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String MY_PREFS_NAME = "MyPrefsFile";
 
     EditText userName, pass; //for sign in
-    EditText newUsrName, newPass, newGmail; //for sign up
+    EditText newUserName, newPass, newEmail; //for sign up
 
 
     FirebaseDatabase databaseF;
@@ -81,6 +79,58 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void signUpDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Sign Up");
+        alertDialog.setMessage("Please fill!");
+
+        LayoutInflater inflater =this.getLayoutInflater();
+        View sign_up_layout=inflater.inflate(R.layout.sign_up_layout,null);
+
+        newUserName=(EditText)sign_up_layout.findViewById(R.id.newUserName);
+        newEmail=(EditText)sign_up_layout.findViewById(R.id.newEmail);
+        newPass=(EditText)sign_up_layout.findViewById(R.id.newPassword);
+
+
+        alertDialog.setView(sign_up_layout);
+        alertDialog.setIcon(R.drawable.ic_account_circle_black_24dp);
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final User users = new User(newUserName.getText().toString(),
+                        newPass.getText().toString(),
+                        newEmail.getText().toString());
+                usersData.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d("signin","asd");
+                        if(dataSnapshot.child(users.getUserName()).exists())
+                            Toast.makeText(MainActivity.this, "This user already exists!", Toast.LENGTH_SHORT).show();
+                        else{
+                            usersData.child(users.getUserName()).setValue(users);
+                            Toast.makeText(MainActivity.this, "Successful registration!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.d("signin","error");
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+    
     private void signIn(final String userN, final String password) {
         usersData.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -163,57 +213,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void signUpDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        alertDialog.setTitle("Sign Up");
-        alertDialog.setMessage("Please fill!");
 
-        LayoutInflater inflater =this.getLayoutInflater();
-        View sign_up_layout=inflater.inflate(R.layout.sign_up_layout,null);
-
-        newUsrName=(EditText)sign_up_layout.findViewById(R.id.newUserName);
-        newGmail=(EditText)sign_up_layout.findViewById(R.id.newEmail);
-        newPass=(EditText)sign_up_layout.findViewById(R.id.newPassword);
-
-
-        alertDialog.setView(sign_up_layout);
-        alertDialog.setIcon(R.drawable.ic_account_circle_black_24dp);
-
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDialog.setPositiveButton("Register", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final User users = new User(newUsrName.getText().toString(),
-                        newPass.getText().toString(),
-                        newGmail.getText().toString());
-                usersData.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.d("signin","asd");
-                        if(dataSnapshot.child(users.getUserName()).exists())
-                            Toast.makeText(MainActivity.this, "This user already exists!", Toast.LENGTH_SHORT).show();
-                        else{
-                            usersData.child(users.getUserName()).setValue(users);
-                            Toast.makeText(MainActivity.this, "Successful registration!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.d("signin","error");
-                    }
-                });
-                dialog.dismiss();
-            }
-        });
-
-        alertDialog.show();
-    }
 }
 
 
