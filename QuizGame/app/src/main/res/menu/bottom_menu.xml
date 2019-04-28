@@ -9,7 +9,7 @@
         android:id="@+id/action_category"
         android:enabled="true"
         android:title="Categories"
-        android:icon="@drawable/ic_question_answer_black_24dp"
+        android:icon="@drawable/categ"
         app:showAsAction="ifRoom"
         tools:ignore="MenuTitle,UnusedAttribute"
 
@@ -20,7 +20,7 @@
         android:id="@+id/action_ranking"
         android:enabled="true"
         android:title="Ranking"
-        android:icon="@drawable/ic_star_black_24dp"
+        android:icon="@drawable/ranking"
         app:showAsAction="ifRoom"
         tools:ignore="MenuTitle,UnusedAttribute"
 
@@ -30,7 +30,7 @@
         android:id="@+id/action_logout"
         android:enabled="true"
         android:title="Logout"
-        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:icon="@drawable/logout"
         app:showAsAction="ifRoom"
         tools:ignore="MenuTitle,UnusedAttribute"
 
